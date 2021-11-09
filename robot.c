@@ -1,15 +1,19 @@
-
 #include "robot.h"
 
+int turning_right = 0;
+int turning_left = 0;
+int t = 0;
+int right_turn = 0;
+
 void setup_robot(struct Robot *robot){
-    robot->x = OVERALL_WINDOW_WIDTH/2-50;
-    robot->y = OVERALL_WINDOW_HEIGHT-50;
-    robot->true_x = OVERALL_WINDOW_WIDTH/2-50;
-    robot->true_y = OVERALL_WINDOW_HEIGHT-50;
+    robot->x = 25;
+    robot->y = OVERALL_WINDOW_HEIGHT - 30;
+    robot->true_x = 25;
+    robot->true_y = OVERALL_WINDOW_HEIGHT - 30;
     robot->width = ROBOT_WIDTH;
     robot->height = ROBOT_HEIGHT;
     robot->direction = 0;
-    robot->angle = 45;
+    robot->angle =0;
     robot->currentSpeed = 0;
     robot->crashed = 0;
     robot->auto_mode = 0;
@@ -30,7 +34,6 @@ int checkRobotHitWall(struct Robot * robot, struct Wall * wall) {
 
     int overlap = checkOverlap(robot->x,robot->width,robot->y,robot->height,
                  wall->x,wall->width,wall->y, wall->height);
-
     return overlap;
 }
 
@@ -50,7 +53,6 @@ int checkRobotReachedEnd(struct Robot * robot, int x, int y, int width, int heig
 
     int overlap = checkOverlap(robot->x,robot->width,robot->y,robot->height,
                  x,width,y,height);
-
     return overlap;
 }
 
@@ -67,6 +69,7 @@ void robotSuccess(struct Robot * robot, int msec) {
         printf("Success!!!!!\n\n");
         printf("Time taken %d seconds %d milliseconds \n", msec/1000, msec%1000);
         printf("Press space to start again\n");
+        robot->auto_mode = 0;
     }
     robot->crashed = 1;
 }
@@ -96,8 +99,8 @@ int checkRobotSensorFrontRightAllWalls(struct Robot * robot, struct Wall_collect
     for (i = 0; i < 5; i++)
     {
         ptr = head_store;
-        xDir = round(robotCentreX+(ROBOT_WIDTH/2-2)*cos((robot->angle)*PI/180)-(-ROBOT_HEIGHT/2-SENSOR_VISION+sensorSensitivityLength*i)*sin((robot->angle)*PI/180));
-        yDir = round(robotCentreY+(ROBOT_WIDTH/2-2)*sin((robot->angle)*PI/180)+(-ROBOT_HEIGHT/2-SENSOR_VISION+sensorSensitivityLength*i)*cos((robot->angle)*PI/180));
+        xDir = round(robotCentreX+(ROBOT_WIDTH/2-2)*cos((robot->angle+90)*PI/180)-(-ROBOT_HEIGHT/2-SENSOR_VISION+sensorSensitivityLength*i)*sin((robot->angle+90)*PI/180));
+        yDir = round(robotCentreY+(ROBOT_WIDTH/2-2)*sin((robot->angle+90)*PI/180)+(-ROBOT_HEIGHT/2-SENSOR_VISION+sensorSensitivityLength*i)*cos((robot->angle+90)*PI/180));
         xTL = (int) xDir;
         yTL = (int) yDir;
         hit = 0;
@@ -149,7 +152,12 @@ void robotUpdate(struct SDL_Renderer * renderer, struct Robot * robot){
     double xDir, yDir;
 
     int robotCentreX, robotCentreY, xTR, yTR, xTL, yTL, xBR, yBR, xBL, yBL;
-    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+    SDL_SetRenderDrawColor(renderer, 13, 200, 228, 255);
+
+    SDL_Rect rect = {robot->x, robot->y, robot->height, robot->width};
+    SDL_SetRenderDrawColor(renderer, 176,172,184, 255);
+    SDL_RenderDrawRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &rect);
 
     /*
     //Other Display options:
@@ -200,37 +208,113 @@ void robotUpdate(struct SDL_Renderer * renderer, struct Robot * robot){
     SDL_RenderDrawLine(renderer,xTL, yTL, xTR, yTR);
 
     //Front Right Sensor
-    int sensor_sensitivity =  floor(SENSOR_VISION/5);
-    int i;
-    for (i = 0; i < 5; i++)
-    {
-        xDir = round(robotCentreX+(ROBOT_WIDTH/2-2)*cos((robot->angle)*PI/180)-(-ROBOT_HEIGHT/2-SENSOR_VISION+sensor_sensitivity*i)*sin((robot->angle)*PI/180));
-        yDir = round(robotCentreY+(ROBOT_WIDTH/2-2)*sin((robot->angle)*PI/180)+(-ROBOT_HEIGHT/2-SENSOR_VISION+sensor_sensitivity*i)*cos((robot->angle)*PI/180));
+    if (robot->angle == 0) {
+        xDir = round(robotCentreX+(ROBOT_WIDTH/2)+1);
+        yDir = round(robotCentreY+(ROBOT_HEIGHT/2)-1);
+
         xTL = (int) xDir;
         yTL = (int) yDir;
 
-        SDL_Rect rect = {xTL, yTL, 2, sensor_sensitivity};
-        SDL_SetRenderDrawColor(renderer, 80+(20*(5-i)), 80+(20*(5-i)), 80+(20*(5-i)), 255);
+        SDL_Rect rect = {xTL, yTL, SENSOR_VISION, 2};
+        SDL_SetRenderDrawColor(renderer, 132, 73, 107, 255);
         SDL_RenderDrawRect(renderer, &rect);
         SDL_RenderFillRect(renderer, &rect);
     }
 
-    //Front Left Sensor
-    for (i = 0; i < 5; i++)
-    {
-        xDir = round(robotCentreX+(-ROBOT_WIDTH/2)*cos((robot->angle)*PI/180)-(-ROBOT_HEIGHT/2-SENSOR_VISION+sensor_sensitivity*i)*sin((robot->angle)*PI/180));
-        yDir = round(robotCentreY+(-ROBOT_WIDTH/2)*sin((robot->angle)*PI/180)+(-ROBOT_HEIGHT/2-SENSOR_VISION+sensor_sensitivity*i)*cos((robot->angle)*PI/180));
+    if (robot->angle == 90) {
+        xDir = round(robotCentreX-(ROBOT_WIDTH/2));
+        yDir = round(robotCentreY+(ROBOT_HEIGHT/2)+1);
+
         xTL = (int) xDir;
         yTL = (int) yDir;
 
-        SDL_Rect rect = {xTL, yTL, 2, sensor_sensitivity};
-        SDL_SetRenderDrawColor(renderer, 80+(20*(5-i)), 80+(20*(5-i)), 80+(20*(5-i)), 255);
+        SDL_Rect rect = {xTL, yTL, 2, SENSOR_VISION};
+        SDL_SetRenderDrawColor(renderer, 196, 120, 164, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    if (robot->angle == 180) {
+        xDir = round(robotCentreX-(ROBOT_WIDTH/2)-SENSOR_VISION);
+        yDir = round(robotCentreY-(ROBOT_HEIGHT/2));
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, SENSOR_VISION, 2};
+        SDL_SetRenderDrawColor(renderer, 132, 73, 107, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    if (robot->angle == 270) {
+        xDir = round(robotCentreX+(ROBOT_WIDTH/2)-1);
+        yDir = round(robotCentreY-(ROBOT_HEIGHT/2)-SENSOR_VISION);
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, 2, SENSOR_VISION};
+        SDL_SetRenderDrawColor(renderer, 196, 120, 164, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+
+
+    //Front Left Sensor
+    if (robot->angle == 0) {
+        xDir = round(robotCentreX-(ROBOT_WIDTH/2));
+        yDir = round(robotCentreY-(ROBOT_HEIGHT/2)-SENSOR_VISION);
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, 2, SENSOR_VISION};
+        SDL_SetRenderDrawColor(renderer, 20, 103, 73, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    if (robot->angle == 90) {
+        xDir = round(robotCentreX+(ROBOT_WIDTH/2)+1);
+        yDir = round(robotCentreY-(ROBOT_HEIGHT/2));
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, SENSOR_VISION, 2};
+        SDL_SetRenderDrawColor(renderer, 97, 188, 242, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    if (robot->angle == 180) {
+        xDir = round(robotCentreX+(ROBOT_WIDTH/2)-1);
+        yDir = round(robotCentreY+(ROBOT_HEIGHT/2)+1);
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, 2, SENSOR_VISION};
+        SDL_SetRenderDrawColor(renderer, 20, 103, 73, 255);;
+        SDL_RenderDrawRect(renderer, &rect);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+
+    if (robot->angle == 270) {
+        xDir = round(robotCentreX-(ROBOT_WIDTH/2)-SENSOR_VISION);
+        yDir = round(robotCentreY+(ROBOT_HEIGHT/2)-1);
+
+        xTL = (int) xDir;
+        yTL = (int) yDir;
+
+        SDL_Rect rect = {xTL, yTL, SENSOR_VISION, 2};
+        SDL_SetRenderDrawColor(renderer, 97, 188, 242, 255);
         SDL_RenderDrawRect(renderer, &rect);
         SDL_RenderFillRect(renderer, &rect);
     }
 }
-
-
 
 void robotMotorMove(struct Robot * robot) {
     double x_offset, y_offset;
@@ -268,61 +352,87 @@ void robotMotorMove(struct Robot * robot) {
 
 void robotAutoMotorMove(struct Robot * robot, int front_left_sensor, int front_right_sensor) {
 
-  /*  if ((front_left_sensor == 0) && (front_right_sensor == 0)) {
-        if (robot->currentSpeed<2)
+    int n;
+    if (turning_right == 1) {
+        if (robot->currentSpeed == 0) {
+            printf("Turning right has been triggered\n");
+            robot->direction = RIGHT;
+            t = t + 1;
+            if (t == 6) {
+                t = 0;
+                turning_right = 0;
+            }
+        }
+
+        else {
+            robot->direction = DOWN;
+        }
+    }
+
+    else if (turning_left == 1) {
+        if (robot->currentSpeed == 0) {
+            printf("Turning left has been triggered");
+            robot->direction = LEFT;
+            t = t + 1;
+            if (t == 6) {
+                t = 0;
+                turning_left = 0;
+            }
+        }
+
+        else {
+            robot->direction = DOWN;
+        }
+    }
+
+    else if (right_turn == 1) {
+
+        if (front_left_sensor > 0) {
+            turning_left = 1;
+            printf("Left turn triggered during a right turn\n");
+        }
+
+        else if ((front_right_sensor == 0) && (robot->currentSpeed<5)) {
             robot->direction = UP;
-    }
-    else if ((robot->currentSpeed>0) && ((front_left_sensor == 1) || (front_right_sensor == 1)) ) {
-        robot->direction = DOWN;
-    }
-    else if ((robot->currentSpeed==0) && ((front_left_sensor == 1) || (front_right_sensor == 1)) ) {
-        robot->direction = LEFT;
-    }
-    else if ((robot->currentSpeed==0) && ((front_left_sensor == 1) || (front_right_sensor == 0)) ) {
-        robot->direction = RIGHT;
-    }
-    else if ((robot->currentSpeed==0) && ((front_left_sensor == 0) || (front_right_sensor == 1)) ) {
-        robot->direction = RIGHT;
-    }
-    */
-    /*
-    if ((front_left_sensor == 0) && (front_right_sensor == 0)) {
-        if (robot->currentSpeed<5)
-            robot->direction = UP;
-    }
-    else if ((robot->currentSpeed>0) && ((front_left_sensor == 1) || (front_left_sensor == 2) || (front_left_sensor == 3) || (front_left_sensor == 4) || (front_right_sensor == 1) || (front_right_sensor == 2) || (front_right_sensor == 3) || (front_right_sensor == 4)) ) {
-        robot->direction = DOWN;
-    }
-    else if ((robot->currentSpeed==0) && (((front_left_sensor == 1) || (front_left_sensor == 2) || (front_left_sensor == 3) || (front_left_sensor == 4)) && (front_right_sensor == 0)) ) {
-        robot->direction = RIGHT;
-        printf("Right turn triggered\n");
-    }
-    else if ((robot->currentSpeed==0) && ((front_left_sensor == 0) && ((front_right_sensor == 1) || (front_right_sensor == 2) || (front_right_sensor == 3) || (front_right_sensor == 4))) ) {
-        robot->direction = LEFT;
-        printf("Left turn triggered\n");
+        }
 
-    }
-    */
-    //else if ((robot->currentSpeed==0) && ((front_left_sensor == 0) || //(front_right_sensor == 1)) ) {
-        //robot->direction = RIGHT;
-        //printf("3 triggered\n");
-
-    //}
-
-    if ((front_left_sensor == 0) && (front_right_sensor == 0)) {
-        if (robot->currentSpeed<5)
-            robot->direction = UP;
-    }
-
-    else if ((front_left_sensor > 0) && (front_right_sensor == 0)) {
-        robot->direction = RIGHT;
-        printf("Right turn triggered\n");
+        else if (front_right_sensor > 0) {
+            right_turn = 0;
+        }
     }
 
     else if ((front_left_sensor == 0) && (front_right_sensor > 0)) {
-        robot->direction = LEFT;
+        if (robot->currentSpeed<5)
+            robot->direction = UP;
+    }
+
+    else if ((front_left_sensor > 0) && (front_right_sensor > 0)) {
+        turning_left = 1;
         printf("Left turn triggered\n");
     }
+
+    else if ((front_left_sensor == 0) && (front_right_sensor == 0) && (right_turn == 0)) {
+
+
+        turning_right = 1;
+        right_turn = 1;
+        printf("Right turn triggered\n");
+    }
+
+
+
+    //else if ((robot->currentSpeed>0) && ((front_left_sensor > 0) || (front_right_sensor > 0)) ) {
+        //robot->direction = DOWN;
+    //}
+    //else if ((robot->currentSpeed==0) && ((front_left_sensor > 0) && (front_right_sensor == 0)) ) {
+        //robot->direction = RIGHT;
+        //printf("Right turn triggered\n");
+    //}
+    //else if ((robot->currentSpeed==0) && ((front_left_sensor == 0) && (front_right_sensor > 0)) ) {
+        //robot->direction = LEFT;
+        //printf("Left turn triggered\n");
+
+
 
 
 }
