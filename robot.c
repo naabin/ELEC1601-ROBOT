@@ -252,12 +252,7 @@ void robotUpdate(struct SDL_Renderer * renderer, struct Robot * robot){
     double xDir, yDir;
 
     int robotCentreX, robotCentreY, xTR, yTR, xTL, yTL, xBR, yBR, xBL, yBL;
-    SDL_SetRenderDrawColor(renderer, 13, 200, 228, 255);
-
-    SDL_Rect rect = {robot->x, robot->y, robot->height, robot->width};
-    SDL_SetRenderDrawColor(renderer, 176,172,184, 255);
-    SDL_RenderDrawRect(renderer, &rect);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
 
     /*
     //Other Display options:
