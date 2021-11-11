@@ -77,9 +77,46 @@ void setup_robot(struct Robot *robot){
 
     printf("Press arrow keys to move manually, or enter to move automatically\n\n");
 }
-
 */
 
+// Maze submission on Ed
+/*
+void setup_robot(struct Robot *robot){
+    robot->x = 25;
+    robot->y = OVERALL_WINDOW_HEIGHT - 30;
+    robot->true_x = 25;
+    robot->true_y = OVERALL_WINDOW_HEIGHT - 30;
+    robot->width = ROBOT_WIDTH;
+    robot->height = ROBOT_HEIGHT;
+    robot->direction = 0;
+    robot->angle =0;
+    robot->currentSpeed = 0;
+    robot->crashed = 0;
+    robot->auto_mode = 0;
+
+    printf("Press arrow keys to move manually, or enter to move automatically\n\n");
+}
+*/
+
+// Simple dead end maze (from W09 Group 11 on Ed)
+/*
+void setup_robot(struct Robot *robot){
+    robot->x = OVERALL_WINDOW_WIDTH/2-50;
+    robot->y = OVERALL_WINDOW_HEIGHT-50;
+    robot->true_x = OVERALL_WINDOW_WIDTH/2-50;
+    robot->true_y = OVERALL_WINDOW_HEIGHT-50;
+
+    robot->width = ROBOT_WIDTH;
+    robot->height = ROBOT_HEIGHT;
+    robot->direction = 0;
+    robot->angle = 0;
+    robot->currentSpeed = 0;
+    robot->crashed = 0;
+    robot->auto_mode = 0;
+
+    printf("Press arrow keys to move manually, or enter to move automatically\n\n");
+}
+*/
 
 
 
