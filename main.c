@@ -114,6 +114,17 @@ int main(int argc, char *argv[]) {
     insertAndSetFirstWall(&head, 23,  560, 210, 10, 270);//23
     */
     
+    // Simple dead-end maze (from W09 group 11 on Ed)
+    /*
+    insertAndSetFirstWall(&head, 1,  OVERALL_WINDOW_WIDTH/2, OVERALL_WINDOW_HEIGHT/2+100, 10, OVERALL_WINDOW_HEIGHT/2+100);
+    insertAndSetFirstWall(&head, 2,  OVERALL_WINDOW_WIDTH/2-100, OVERALL_WINDOW_HEIGHT/2-200, 10, OVERALL_WINDOW_HEIGHT/2+200);
+    insertAndSetFirstWall(&head, 3,  OVERALL_WINDOW_WIDTH/2, OVERALL_WINDOW_HEIGHT/2+100, 150, 10);
+    insertAndSetFirstWall(&head, 4,  OVERALL_WINDOW_WIDTH/2, OVERALL_WINDOW_HEIGHT/2, 150, 10);
+    insertAndSetFirstWall(&head, 5,  OVERALL_WINDOW_WIDTH/2, OVERALL_WINDOW_HEIGHT/2-100, 10, 100);
+    insertAndSetFirstWall(&head, 6,  OVERALL_WINDOW_WIDTH/2-100, OVERALL_WINDOW_HEIGHT/2-200, 450, 10);
+    insertAndSetFirstWall(&head, 7,  OVERALL_WINDOW_WIDTH/2, OVERALL_WINDOW_HEIGHT/2-100, 350, 10);
+    insertAndSetFirstWall(&head, 8,  OVERALL_WINDOW_WIDTH/2+150, OVERALL_WINDOW_HEIGHT/2, 10, OVERALL_WINDOW_HEIGHT/2-130);
+    */
 
     setup_robot(&robot);
     updateAllWalls(head, renderer);
