@@ -5,21 +5,84 @@ int turning_left = 0;
 int t = 0;
 int right_turn = 0;
 
+// Maze 1
 void setup_robot(struct Robot *robot){
-    robot->x = 25;
-    robot->y = OVERALL_WINDOW_HEIGHT - 30;
-    robot->true_x = 25;
-    robot->true_y = OVERALL_WINDOW_HEIGHT - 30;
+    robot->x = 270;
+    robot->y = 460;
+    robot->true_x = 270;
+    robot->true_y = 460;
     robot->width = ROBOT_WIDTH;
     robot->height = ROBOT_HEIGHT;
     robot->direction = 0;
-    robot->angle =0;
+    robot->angle = 0;
     robot->currentSpeed = 0;
     robot->crashed = 0;
     robot->auto_mode = 0;
 
     printf("Press arrow keys to move manually, or enter to move automatically\n\n");
 }
+
+/*
+// Maze 2
+void setup_robot(struct Robot *robot){
+    robot->x = 620;
+    robot->y = 380;
+    robot->true_x = 620;
+    robot->true_y = 380;
+    robot->width = ROBOT_WIDTH;
+    robot->height = ROBOT_HEIGHT;
+    robot->direction = 0;
+    robot->angle = 270;
+    robot->currentSpeed = 0;
+    robot->crashed = 0;
+    robot->auto_mode = 0;
+
+    printf("Press arrow keys to move manually, or enter to move automatically\n\n");
+}
+*/
+
+/*
+// MAZE 3
+void setup_robot(struct Robot *robot){
+    robot->x = 640-10-270;
+    robot->y = 460;
+    robot->true_x = 640-10-270;
+    robot->true_y = 460;
+    robot->width = ROBOT_WIDTH;
+    robot->height = ROBOT_HEIGHT;
+    robot->direction = 0;
+    robot->angle = 0;
+    robot->currentSpeed = 0;
+    robot->crashed = 0;
+    robot->auto_mode = 0;
+
+    printf("Press arrow keys to move manually, or enter to move automatically\n\n");
+}
+*/
+
+/*
+// MAZE 4
+void setup_robot(struct Robot *robot){
+    robot->x = 0;
+    robot->y = 380;
+    robot->true_x = 0;
+    robot->true_y = 380;
+    robot->width = ROBOT_WIDTH;
+    robot->height = ROBOT_HEIGHT;
+    robot->direction = 0;
+    robot->angle = 90;
+    robot->currentSpeed = 0;
+    robot->crashed = 0;
+    robot->auto_mode = 0;
+
+    printf("Press arrow keys to move manually, or enter to move automatically\n\n");
+}
+
+*/
+
+
+
+
 int robot_off_screen(struct Robot * robot){
     if(robot->x < 0 || robot-> y < 0){
         return 0;
