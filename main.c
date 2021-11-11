@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
         //if (checkRobotReachedEnd(&robot, 220, 480, 100, 10)){ //Maze 2
         //if (checkRobotReachedEnd(&robot, 0, 340, 10, 100)){ // Maze 3
         //if (checkRobotReachedEnd(&robot, 640-10-320, 480, 100, 10)){ //Maze 4
+        //if (checkRobotReachedEnd(&robot, OVERALL_WINDOW_WIDTH-10, OVERALL_WINDOW_HEIGHT-35, 10, 100)){ //Maze submission on Ed
             end_time = clock();
             msec = (end_time-start_time) * 1000 / CLOCKS_PER_SEC;
             robotSuccess(&robot, msec);
